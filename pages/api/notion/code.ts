@@ -9,7 +9,7 @@ export default function code(req: NextApiRequest, res: NextApiResponse) {
 
   const [state, redirectUri] = query.state?.toString().split('|') ?? ['undefined', 'undefined'];
 
-  const redirectUrl = redirectUri + '?' +
+  const redirectUrl = redirectUri + '&' +
     new URLSearchParams({
       code: query.code?.toString() ?? 'undefined',
       state,
