@@ -1,4 +1,4 @@
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs'
+import { createPagesServerClient } from '@supabase/auth-helpers-nextjs'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     ? process.env.S_PROXY_REDIRECT_URL
     : 'null';
 
-  const supabase = createServerSupabaseClient(
+  const supabase = createPagesServerClient(
     { req, res },
     {
       supabaseUrl: process.env.SUPABASE_URL,
