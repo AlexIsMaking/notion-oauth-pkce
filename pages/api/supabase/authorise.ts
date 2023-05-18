@@ -43,5 +43,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.json(JSON.stringify(error))
   }
 
-  res.redirect(data.url)
+  if (data.url !== null) {
+    res.redirect(data.url);
+  } else {
+    res.send('The redirect URL is not available.');
+  }
 }
