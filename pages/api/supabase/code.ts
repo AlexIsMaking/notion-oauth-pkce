@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs'
+import { createPagesServerClient } from '@supabase/auth-helpers-nextjs'
 
 export default async function code(req: NextApiRequest, res: NextApiResponse) {
   if (!process.env.N_CLIENT_REDIRECT_URL) {
@@ -14,7 +14,7 @@ export default async function code(req: NextApiRequest, res: NextApiResponse) {
   //console.log('urlState', urlState);
   //console.log('urlCode', urlCode);
 
-  const supabase = createServerSupabaseClient(
+  const supabase = createPagesServerClient(
     { req, res },
     {
       supabaseUrl: process.env.SUPABASE_URL,
@@ -22,23 +22,31 @@ export default async function code(req: NextApiRequest, res: NextApiResponse) {
     }
   )
 
-  const userSession = await supabase.auth.exchangeCodeForSession(urlCode);
-  const session = userSession.data.session;
-  const expiresIn = session.expires_in;
-  const refreshToken = session.refresh_token;
-  const accessToken = session.access_token;
+  if (typeof urlCode === 'string') {
+    const userSession = await supabase.auth.exchangeCodeForSession(urlCode);
+    const session = userSession.data.session;
+    if (session !== null) {
+      const expiresIn = session.expires_in;
+      const refreshToken = session.refresh_token;
+      const accessToken = session.access_token;
 
-  const sessionCode = 'expires_in=' + expiresIn + '|' + 'refresh_token=' + refreshToken + '|' + 'access_token=' + accessToken;
-
-  if (typeof urlState === 'string') {
-    const redirectUrl = 'https://raycast.com/redirect?packageName=Extension' + '&' +
-      new URLSearchParams({
-        state: urlState,
-        code: sessionCode,
-      });
-    res.redirect(redirectUrl);
+      const sessionCode = 'expires_in=' + expiresIn + '|' + 'refresh_token=' + refreshToken + '|' + 'access_token=' + accessToken;
+  
+      if (typeof urlState === 'string') {
+        const redirectUrl = 'https://raycast.com/redirect?packageName=Extension' + '&' +
+          new URLSearchParams({
+            state: urlState,
+            code: sessionCode,
+          });
+        res.redirect(redirectUrl);
+      } else {
+        console.error('urlState must be a string');
+      }
+    } else {
+      throw new Error('Invalid urlCode. Please provide a valid string value.');
+    }
   } else {
-    console.error('urlState must be a string');
-  }  
+    throw new Error('Session was not created.');
+  }
 
 }

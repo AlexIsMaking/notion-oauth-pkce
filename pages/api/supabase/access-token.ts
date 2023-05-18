@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs'
+import { createPagesServerClient } from '@supabase/auth-helpers-nextjs'
 
 export default async function accessToken(
   req: NextApiRequest,
@@ -17,7 +17,7 @@ export default async function accessToken(
   const code = body.code
   console.log('code: ', code);
 
-  const supabase = createServerSupabaseClient(
+  const supabase = createPagesServerClient(
     { req, res },
     {
       supabaseUrl: process.env.SUPABASE_URL,
