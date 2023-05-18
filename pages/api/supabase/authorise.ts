@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   console.log('query: ' + JSON.stringify(query));
 
   // !! Needs to be updated to use S variables
-  const N_ALLOWED_REDIRECT_URIS = process.env.N_REDIRECT_URIS.split(', ');
+  const N_ALLOWED_REDIRECT_URIS = process.env.N_REDIRECT_URIS!.split(', ');
   const proxyRedirectUri = (typeof query.redirect_uri === 'string' && N_ALLOWED_REDIRECT_URIS.includes(query.redirect_uri.toString()))
     ? process.env.S_PROXY_REDIRECT_URL
     : 'null';

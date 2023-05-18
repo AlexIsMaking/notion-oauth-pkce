@@ -30,11 +30,15 @@ export default async function code(req: NextApiRequest, res: NextApiResponse) {
 
   const sessionCode = 'expires_in=' + expiresIn + '|' + 'refresh_token=' + refreshToken + '|' + 'access_token=' + accessToken;
 
-  const redirectUrl = 'https://raycast.com/redirect?packageName=Extension' + '&' +
-    new URLSearchParams({
-      state: urlState,
-      code: sessionCode,
-    });
+  if (typeof urlState === 'string') {
+    const redirectUrl = 'https://raycast.com/redirect?packageName=Extension' + '&' +
+      new URLSearchParams({
+        state: urlState,
+        code: sessionCode,
+      });
+    res.redirect(redirectUrl);
+  } else {
+    console.error('urlState must be a string');
+  }  
 
-  res.redirect(redirectUrl);
 }
