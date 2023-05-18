@@ -5,12 +5,12 @@ const nextConfig = {
 		return [
 			{
 				source: '/',
-				destination: 'https://github.com/JamesNZL',
+				destination: 'https://www.anotioneer.com/',
 				permanent: false,
 			},
 			{
 				source: '/:path((?!api/).*)',
-				destination: 'https://github.com/JamesNZL',
+				destination: 'https://www.anotioneer.com/',
 				permanent: false,
 			},
 		];
